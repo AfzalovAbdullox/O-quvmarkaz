@@ -1,0 +1,163 @@
+{% extends "Header.html" %}
+{% block profilforadmin %}
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin: 0;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .card {
+            background: #fff;
+            width: 714px;
+            height: 300px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .surname {
+            font-size: 20px;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+
+        .info {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin: 5px 0;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .box-of-course-main {
+            width: 150px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+            overflow-y: scroll;
+
+        }
+
+        .box-course {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+            background-color: #3498db;
+            border-radius: 5px;
+
+        }
+
+        .img-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+
+        }
+
+
+    </style>
+    <section style="width: 100%;height: 600px; display: flex;align-items: center;justify-content: center">
+
+        <div class="card">
+
+            <div class="name">{{ students.name }}</div>
+            <div class="surname">{{ students.surname }}</div>
+            <div class="info">{{ students.email }}</div>
+            <div class="info">Tug'ilgan sana: {{ students.year }}</div>
+            <div class="info">Yosh: {{ age_user.get(students.id) }}</div>
+            <div class="info">ID: {{ students.id }}</div>
+
+            <div class="info">Telafon nomer : {{ students.phone }}</div>
+
+
+            <div class="buttons">
+                <a style="text-decoration: none; color: black;"
+                   href="{{ url_for('delete_from_user', user_id=students.id, id=user_id) }}">
+                    <button class="btn btn-delete">Ochirish</button>
+                </a>
+                <a style="text-decoration: none; color: black;"
+                   href="{{ url_for('edituserforadmin', user_id=students.id, id=user_id) }}">
+                    <button class="btn btn-edit">O'zgartirish</button>
+                </a>
+            </div>
+
+        </div>
+        <div class="box-of-course-main">
+            {% for kur in students.kurs %}
+                <a style="text-decoration: none; color: white" href="{{ url_for("Zapisi", kurs_id=kur.id) }}">
+                    <div class="box-course">
+                        <img class="img-box" src="{{ kur.photo }}" alt="">
+                        <p>{{ kur.name }}</p>
+                    </div>
+                </a>
+
+            {% endfor %}
+
+            <div>
+
+            </div>
+        </div>
+
+    </section>
+
+{% endblock %}

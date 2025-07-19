@@ -1,0 +1,115 @@
+{% extends "Header.html" %}
+{% block liad %}
+    <link rel="stylesheet" href="/static/css/Header.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/admincss.css">
+{% endblock %}
+{% block adminpage %}
+    <button style="margin-top: 72px" onclick="toggleFilter()" class="bg-green-600 text-white p-2 rounded">Filter
+    </button>
+    <a href="{{ url_for("admin_new_user") }}">
+    <button style="margin-top: 72px" class="bg-green-600 text-white p-2 rounded">New user
+    </button>
+    </a>
+
+    <section style="width: auto;height: auto;display: flex;align-items: center;justify-content: space-around">
+
+
+        <div id="filter-box" class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md"
+             style="display: none;">
+            <form class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md" method="post"
+                  action="{{ url_for('adminuser') }}">
+                <input class="w-full p-3 mb-3 rounded-lg border" type="text" name="name" placeholder="ism">
+                <input class="w-full p-3 mb-3 rounded-lg border" type="text" name="surname" placeholder="familiya">
+
+                <input class="w-full p-3 mb-3 rounded-lg border" type="number" name="age" placeholder="Yosh">
+                <select class="w-full p-3 mb-3 rounded-lg border" name="predment" id="">
+                    {% for pred in kurs %}
+                        <option value="{{ pred.id }}">{{ pred.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="box">
+                    <button class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700" type="submit">Поиск
+                    </button>
+                    <button class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700" name="reset"
+                            type="submit">Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div style="width: auto;height: auto">
+
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Foydalanuvchi</th>
+                    <th>Email</th>
+                    <th>Sana</th>
+                    <th>Yosh</th>
+                    <th>Predment</th>
+                    <th>Parol</th>
+                    <th>reg vaqti</th>
+                    <th>Amallar</th>
+                </tr>
+                </thead>
+                {% if students.kurs == None %}
+
+                {% else %}
+                    {% for stu in students %}
+
+                        <tbody>
+                        <tr>
+                            <td>{{ stu.id }}</td>
+                            <td>{{ stu.name }} {{ stu.surname }}</td>
+                            <td>{{ stu.email }}</td>
+                            <td>{{ stu.year }}</td>
+                            <td>{{ age_user.get(stu.id) }} yosh</td>
+                            {% if stu.kurs %}
+                                <th>
+                                    {% for kur in stu.kurs %}
+                                        {{ kur.name }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </th>
+                            {% else %}
+                                <th>Kurs yo‘q</th>
+                            {% endif %}
+
+
+
+
+                            {#                        {% for st in stu.kurs %}#}
+                            {##}
+                            {#                            {% if st.name == None %}#}
+                            {##}
+                            {#                            {% else %}#}
+                            {#                                <th>{{ st.name }} {% if not loop.last %}, {% endif %}</th>#}
+                            {#                            {% endif %}#}
+                            {#                        {% endfor %}#}
+
+
+                            <td>........</td>
+                            <td>{{ stu.created_at }}</td>
+
+
+                            <td style="width: 200px; height: 74px;display: flex;align-items: center;justify-content: space-around">
+                                <a style="text-decoration: none;color: white"
+                                   href="{{ url_for('vievprofil', role=session.get('role'), user_id=stu.id) }}">
+                                    <button class="edit">Profil</button>
+                                </a>
+
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    {% endfor %}
+                {% endif %}
+
+            </table>
+        </div>
+
+    </section>
+    <script src="/static/js/animation.js">
+
+    </script>
+{% endblock %}

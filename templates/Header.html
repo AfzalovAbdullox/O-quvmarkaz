@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Turon</title>
+    <link rel="stylesheet" href="/static/css/Header.css">
+    {% block links %}
+
+    {% endblock %}
+    {% block linktab %}
+
+    {% endblock %}
+    {% block linkkurs %}
+
+    {% endblock %}
+    {% block linkss %}
+
+    {% endblock %}
+    {% block liad %}
+
+    {% endblock %}
+</head>
+
+
+<body>
+
+
+<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+<div class="sidebar hidden" id="sidebar">
+    <h2>Turon</h2>
+    <ul>
+        <li><a class="bbsb" href="{{ url_for('turonedu') }}">Asosiy oyna</a></li>
+        <li><a class="bbsb" href="{{ url_for('kurs') }}">Kurslar</a></li>
+        <li class="admin-tools hidden"><a href="{{ url_for('kurs') }}" class="bbsb">Qollab quvvatlash</a></li>
+
+        {% if current_user.role == "admin" %}
+            <li>
+                <a class="bbsb" href="{{ url_for('adminpage') }}" >Arizalar</a>
+            </li>
+            <li><a href="{{ url_for('predment') }}" class="bbsb">Predment</a></li>
+            <li class="admin-tools ">
+                <a style="text-decoration: none;color: white" class="bbsb" href="{{ url_for('add_kurs') }}">Kurs
+                    Qoshish</a>
+            </li>
+            <li class="admin-tools ">
+                <a style="text-decoration: none;color: white" href="{{ url_for('adminkurs') }}">Kurs jadvali</a>
+            </li>
+
+            <li class="admin-tools ">
+                <a style="text-decoration: none;color: white" href="{{ url_for('adminteacher') }}">O`qituvchilar
+                    jadvali</a>
+            </li>
+            <li class="admin-tools ">
+                <a style="text-decoration: none;color: white" href="{{ url_for('adminuser') }}">Foydalanovchilar
+                    jad</a>
+            </li>
+
+        {% endif %}
+
+
+    </ul>
+    <ul class="button-menu-sitebar">
+
+
+        {% if not current_user and not teacher %}
+            <a style="text-decoration: none;color: white" href="{{ url_for('login') }}">
+                <li class="log-reg">
+                    <svg style="width: 20px;height: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                              d="M352 96l64 0c17.7 0 32 14.3 32 32l0 256c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0c53 0 96-43 96-96l0-256c0-53-43-96-96-96l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-9.4 182.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L242.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"/>
+                    </svg>
+                    <strong>Kirish</strong>
+                </li>
+            </a>
+        {% endif %}
+
+        {% if current_user and session.get("role") in ["student", "admin", "user"] %}
+            <a style="text-decoration: none;color: white"
+               href="{{ url_for('hisob', role=session.get('role'), user_id=current_user.id) }}">
+                <li class="logs-reg">
+                    <svg style="width: 20px;height: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                              d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                    </svg>
+                    <strong>Hisob</strong>
+                </li>
+            </a>
+        {% endif %}
+
+        {% if teacher and session.get("role") == "teacher" %}
+            <a style="text-decoration: none;color: white"
+               href="{{ url_for('hisob', role='teacher', user_id=teacher.id) }}">
+                <li class="logs-reg">
+                    <svg style="width: 20px;height: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">#}
+                        <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                              d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                    </svg>
+                    <strong>Hisob</strong>
+                </li>
+            </a>
+        {% endif %}
+
+        {% if current_user.role == "admin" %}
+            <li>
+                <a style="text-decoration: none;color: white" href="{{ url_for('techreg') }}">
+
+                    Kirish o`qituvchi
+
+                </a>
+            </li>
+
+        {% endif %}
+
+
+    </ul>
+
+
+</div>
+<div class="main full" id="main">
+    {% block containermain %}
+
+    {% endblock %}
+    {% block container %}
+
+    {% endblock %}
+    {% block containers %}
+
+    {% endblock %}
+    {% block profil %}
+
+    {% endblock %}
+    {% block edus %}
+
+    {% endblock %}
+    {% block techreg %}
+
+    {% endblock %}
+    {% block kurs %}
+
+    {% endblock %}
+    {% block predment %}
+
+    {% endblock %}
+    {% block edks %}
+
+    {% endblock %}
+    {% block adminpage %}
+
+    {% endblock %}
+    {% block kurwiwe %}
+
+    {% endblock %}
+{% block profilforadmin %}
+
+{% endblock %}
+
+    <footer class="about-footer">
+        <div class="main-turon">
+            <h1 class="turonenu-main-p"><span class="turonenu">Turon</span> o`quv markazi</h1>
+        </div>
+        <div class="buttom-footer-main">
+            <div class="follow-school">
+                <div class="follow-school-studio">
+                    <img class="gennis-foolow-school" src="/static/img/gennis2.png" alt="gennis">
+                    <img class="INTER_studio" src="/static/img/Interstudio.jpeg" alt="gennis">
+                </div>
+
+                <p class="turon-gennis">
+                    Turon o`quv markazi asoschi oquv markaz
+                </p>
+                <p class="turon-gennis">
+                    Sayt resurslari va yartuvchi studia
+                </p>
+            </div>
+            <div class="syte-page">
+                <h2 style="width: 200px; text-align: start;color: black">Sayt oynalari</h2>
+
+                <a class="site-pages" href="{{ url_for("turonedu") }}">
+                    <strong class="site-pages">Asosiy oyna</strong>
+                </a>
+
+
+                {#                <a class="site-pages" href="{{ url_for("hisob", role=session.get('role'), user_id=current_user.id) }}">#}
+                {#                    <strong class="site-pages">Profil</strong>#}
+                {#                </a>#}
+                {#                {% if teacher and session.get("role") == "teacher" %}#}
+                {##}
+                {#                    <a class="site-pages" href="{{ url_for("hisob",role='teacher', user_id=teacher.id) }}">#}
+                {#                        <strong class="site-pages">hisob</strong>#}
+                {#                    </a>#}
+                {#                {% endif %}#}
+
+
+                                <a  class="site-pages" href="{{ url_for("kurs") }}">
+                                    <strong class="site-pages">Kurslar</strong>
+                                </a>
+
+
+            </div>
+            <div class="syte-page">
+                <h2 style="width: 200px; text-align: start;color: black">Qoshimcha</h2>
+                <strong class="site-pages">Qollab quvvatlash</strong>
+                <strong class="site-pages">Kirish</strong>
+                <strong class="site-pages">Ma`lumotlar</strong>
+                <strong class="site-pages">Biz haqimizda</strong>
+
+
+            </div>
+
+        </div>
+        <footer class="footer-main">
+            <h2 style="width: 250px; text-align: start;">☎+998 7 345 09 23</h2>
+            <h2 style="width: 250px; text-align: start;">⏰7:00-19:00</h2>
+            <h2 style="width: 250px; text-align: start;">©turon 2019-2025</h2>
+        </footer>
+
+    </footer>
+
+</div>
+
+
+<script src="/static/js/forhead.js">
+
+</script>
+</body>
+</html>
+

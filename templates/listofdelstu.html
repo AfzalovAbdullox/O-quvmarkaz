@@ -1,0 +1,141 @@
+{% extends "Header.html" %}
+{% block links %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/register_login.css">
+    <link rel="stylesheet" href="/static/css/Header.css">
+    <link rel="stylesheet" href="/static/css/admincss.css">
+{% endblock %}
+{% block adminpage %}
+    <style>
+        .stret {
+            display: flex;
+        }
+    </style>
+
+
+
+
+
+
+
+    <section
+            style="width: 100%; height: 500px; overflow-y: scroll;display: flex;align-items: center;justify-content: center; flex-direction: column">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Foydalanuvchi</th>
+                <th>Email</th>
+                <th>telefon raqam</th>
+                <th>Amallar</th>
+            </tr>
+            </thead>
+            <thead id="output">
+
+            </thead>
+            {#            jsondaan kelaadigan malumot#}
+
+        </table>
+        <button class="remake">O`chirish
+        </button>
+    </section>
+
+
+
+
+    <script>
+        getData();
+        let student_ids = [];
+
+        function getData() {
+            fetch(`http://127.0.0.1:5000/api/date_of_student_v2/{{ kurs_id }}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Tarmoq javobi xato: " + response.status);
+                    }
+                    return response.json();
+                })
+                .then(users => {
+                    const output = document.getElementById("output");
+                    output.innerHTML = "";
+
+                    if (users.length === 0) {
+                        output.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center text-red-600 font-bold p-4">Kursga hechkim yoq</td>
+                        </tr>`;
+                        return;
+                    }
+
+                    users.forEach(user => {
+                        const row = `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name} ${user.surname}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phone}</td>
+                            <td>
+                                <input data-id="${user.id}" class="check" type="checkbox" style="width: 20px; height: 20px;">
+                            </td>
+                        </tr>`;
+                        output.innerHTML += row;
+                    });
+                    const buttonSet = document.querySelector('.remake');
+                    {#htmlda bekenntgaa kelgn maalumotni qoshadi#}
+
+
+                    const checks = document.querySelectorAll('.check');
+                    checks.forEach(check => {
+                        check.addEventListener("input", function () {
+                            buttonSet.classList.toggle("stret")
+
+                            const id = check.dataset.id;
+                            if (check.checked) {
+                                if (!student_ids.includes(id)) {
+                                    student_ids.push(id);
+                                }
+                            } else {
+                                student_ids = student_ids.filter(item => item !== id);
+                            }
+                            buttonSet.style.display = student_ids.length > 0 ? "flex" : "none";
+                        });
+                    });
+                    {#user cheked (chekbox) qilinganda id sini olib massive ga push(qoshish) qiladi #}
+                    buttonSet.onclick = function () {
+                        fetch(`http://127.0.0.1:5000/api/remove_student_from_course/{{ kurs_id }}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({buttom_set: student_ids})
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Oquvchi kursdan chiqib ketti ❌");
+                                    getData();
+                                } else {
+                                    alert("Xatolik: " + (data.error || "Noma'lum"));
+                                }
+                            })
+                            {#buttonSet bosilgandaa massivdagi malumotnni bekentga yuboradi#}
+                            .catch(error => {
+                                alert("Server xatolik yuz berdi ❌: " + error.message);
+                            });
+
+                    }
+
+
+                });
+        }
+
+
+    </script>
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "Header.html" %}
+{% block liad %}
+    <link rel="stylesheet" href="/static/css/Header.css">
+    <link rel="stylesheet" href="/static/css/admincss.css">
+{% endblock %}
+{% block adminpage %}
+
+
+
+
+
+    <main style="margin-left: 51px">
+
+
+
+        <h2>Yozuvlar (Zapislar) boshqaruvi</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+            <tr>
+                <th>Foydalanuvchi</th>
+                <th>Kurs</th>
+                <th>Status</th>
+                <th>Harakatlar</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for zapis in zapisi %}
+                <tr>
+                    <td>{{ zapis.user.name }} {{ zapis.user.surname }}</td>
+                    <td>{{ zapis.kurs.name }}</td>
+                    <td>
+                        {% if zapis.status %}
+                            Tasdiqlangan
+                        {% else %}
+                            Tasdiqlanmagan
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not zapis.status %}
+                            <a href="{{ url_for('galochka', user_id=zapis.user.id, kurs_id=zapis.kurs.id) }}">Tasdiqlash</a>
+                        {% endif %}
+                        <a href="{{ url_for('bekor_qilish', user_id=zapis.user.id, kurs_id=zapis.kurs.id) }}"
+                           style="color:red;">Bekor qilish</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </main>
+
+{% endblock %}

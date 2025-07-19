@@ -1,0 +1,82 @@
+{% extends "Header.html" %}
+{% block linkkurs %}
+    <link rel="stylesheet" href="/static/css/kurs.css">
+
+{% endblock %}
+{% block kurs %}
+    {% if kurslar %}
+        {% if current_user.role == "admin" %}
+            <section class="add-kurs_a-section">
+                Amallar
+
+                <a class="atab-add" href="{{ url_for("add_kurs") }}">
+                    <button class="addent-kurs">
+                        Kurs qoshish
+                    </button>
+                </a>
+                <a class="atab-add" href="{{ url_for("selectrOI") }}">
+                    <button class="addent-kurs">
+                        O`quvchilar
+                    </button>
+                </a>
+            </section>
+        {% endif %}
+    {% endif %}
+
+
+    <section class="kurs-all-link-big_section">
+        {% if not kurslar %}
+            <div style="height: 100px;display: flex;align-items: center;justify-content: space-around;flex-direction: column">
+                Kurslar hozircha mavjut emas (* ￣︿￣)
+                {% if current_user.role == "admin" %}
+                    <a class="atab-add" href="{{ url_for("add_kurs") }}">
+                        <button class="addent-kurs">
+                            Kurs qoshish
+                        </button>
+                    </a>
+                {% endif %}
+
+
+            </div>
+
+        {% endif %}
+        {% for kurs in kurslar %}
+
+            <div class="kurses">
+                <div class="kurs-img-about">
+                    <div class="kurs-img">
+                        <img class="kurs-img-mini_img" src="{{ kurs.photo }}" alt="">
+                    </div>
+                    <div class="kurs-about">
+                        <h2 class="kurs-name">{{ kurs.name }}</h2>
+                        <p class="about-kurs">{{ kurs.about }}</p>
+                        <p class="about-kurs">{{ kurs.predment.name }}</p>
+                        <p class="about-kurs">{{ kurs.price }} ming so`m</p>
+                        {% if kurs.teacher %}
+                            <h4 class="teachers-kurs">
+                                {{ kurs.teacher.name }} {{ kurs.teacher.surname }}
+                            </h4>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="kurs-buttons">
+                    <a href="{{ url_for('edit_kurs', kurs_id=kurs.id) }}">
+                        <button class="join-kurs">O‘zgartirish</button>
+                    </a>
+                    <a href="{{ url_for('subscribe', kurs_id=kurs.id) }}">
+                        <button class="join-kurs">Qo‘shilish</button>
+                    </a>
+                    {% if current_user.role == "admin" %}
+                        <form action="{{ url_for("delete_from_kurs", kurs_id=kurs.id) }}" method="POST">
+                            <button class="delete--kurs-button"><p style="margin-left: 13px;">O‘chirish</p> <img
+                                    class="delete--kurs-button-img"
+                                    src="/static/img/trash-can-solid.svg"
+                                    alt=""></button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
+{% endblock %}

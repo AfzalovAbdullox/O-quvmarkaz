@@ -1,0 +1,59 @@
+{% extends "Header.html" %}
+{% block linktab %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/hisob.css">
+
+{% endblock %}
+{% block profil %}
+    <div class="mega-hisob-div">
+        <div class="hisob-card">
+            <div class="edit-div">
+                <a style="text-decoration: none; color: black;"
+                   href="{{ url_for('edit_user', user_id=current_user.id, id=user_id) }}">
+                    <div class="edit-button">
+                        🖊
+                    </div>
+                </a>
+
+            </div>
+            <div class="button-div">
+                <div class="img-cart">
+                    {% if current_user.photo %}
+                        <img class="img-hisob" src="{{ current_user.photo }}" alt="">
+                    {% endif %}
+                    {% if current_user.photo == None %}
+                        <img class="img-hisob" src="/static/img/user-solid.svg" alt="">
+                    {% endif %}
+                </div>
+                <div class="date-of-hisob">
+                    <h1>{{ current_user.name }} {{ current_user.surname }}</h1>
+
+                    <p style="color: green;font-family: 'MV Boli';font-size: 40px">
+                        {{ current_user.role }}
+                    </p>
+
+
+                    <h3>
+                        {{ current_user.email }}
+                    </h3>
+                    <h3>{{ current_user.year }}</h3>
+
+
+                    <form action="{{ url_for("logout", user_id=current_user.id, id=user_id) }}">
+                        <button style="background-color: #f5f5f5;
+    width: 100px;
+    height: 50px;
+    border: #004aad 1px solid;
+border-radius:20px;
+font-size: 20px" class="button-of-log">
+                            Log out
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

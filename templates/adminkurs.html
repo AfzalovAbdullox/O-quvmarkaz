@@ -1,0 +1,101 @@
+{% extends "Header.html" %}
+{% block liad %}
+    <link rel="stylesheet" href="/static/css/Header.css">
+    <link rel="stylesheet" href="/static/css/admincss.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+{% endblock %}
+{% block adminpage %}
+    <button style="margin-top: 72px" onclick="toggleFilter()" class="bg-green-600 text-white p-2 rounded">Filter
+    </button>
+    <section style="width: auto;height: auto;display: flex;align-items: center;justify-content: space-around">
+
+
+        <div id="filter-box" class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md"
+             style="display: none;">
+            <form class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md" method="post"
+                  action="{{ url_for('adminkurs') }}">
+                <input class="w-full p-3 mb-3 rounded-lg border" type="text" name="name" placeholder="ism">
+                <select class="w-full p-3 mb-3 rounded-lg border" name="pred_id">
+                    {% for pred in predment %}
+                        <option value="{{ pred.id }}">{{ pred.name }}</option>
+                    {% endfor %}
+                </select>
+             <select class="w-full p-3 mb-3 rounded-lg border" name="teacher_id">
+                    {% for tech in teachers %}
+                        <option value="{{ tech.id }}">{{ tech.name }} {{ tech.surname }}</option>
+                    {% endfor %}
+                </select>
+
+
+                <div class="box">
+                    <button class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700" type="submit">Поиск
+                    </button>
+                    <button class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700" name="reset"
+                            type="submit">Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Kurs turi</th>
+                <th>Kurs nomi</th>
+                <th>Kurs narxi</th>
+                <th>O‘qituvchi</th>
+                <th>Amallar</th>
+            </tr>
+            </thead>
+            {% if not kurs %}
+                <div style="height: 100px;display: flex;align-items: center;justify-content: space-around;flex-direction: column">
+                    Kurslar hozircha mavjut emas (* ￣︿￣)
+                    {% if current_user.role == "admin" %}
+                        <a class="atab-add" href="{{ url_for("add_kurs") }}">
+                            <button class="addent-kurs">
+                                Kurs qoshish
+                            </button>
+                        </a>
+                    {% endif %}
+
+
+                </div>
+
+            {% endif %}
+            {% for kur in kurs %}
+
+                <tbody>
+                <tr>
+                    <td>{{ kur.id }}</td>
+                    <td>{{ kur.predment.name }}</td>
+                    <td>{{ kur.name }}</td>
+                    <td>{{ kur.price }} ming so`m</td>
+                    {% if kur.teacher %}
+                        <td>{{ kur.teacher.name }} {{ kur.teacher.surname }}</td>
+                    {% endif %}
+
+                    <td  style="width: 250px; height: 74px;display: flex;align-items: center;justify-content: space-around">
+                        <a href="{{ url_for('edit_kurs', kurs_id=kur.id) }}">
+
+                            <button class="edit">Tahrirlash</button>
+                        </a>
+
+                        <form action="{{ url_for("delete_from_kurs", kurs_id=kur.id) }}" method="POST">
+
+                            <button class="delete">O‘chirish</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            {% endfor %}
+
+
+        </table>
+    </section>
+    <script src="/static/js/animation.js">
+
+    </script>
+
+{% endblock %}

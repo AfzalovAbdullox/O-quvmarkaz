@@ -1,0 +1,106 @@
+{% extends "Header.html" %}
+{% block link %}
+    <link rel="stylesheet" href="/static/css/Header.css">
+{% endblock %}
+
+{% block containermain %}
+    <header>
+        <div class="container hero">
+            <div class="hero-text">
+                <h1>Kelajagingiz <br> <span>Turon</span> bilan boshlansin!</h1>
+                <form action="Header.html" class="register-form">
+                    <input type="text" placeholder="Ism" required/>
+                    <input type="tel" placeholder="Tel raqam" required/>
+                    <select>
+                        <option>Kurs tanlash</option>
+                        <option>Ingliz tili</option>
+                        <option>Matematika</option>
+                        <option>Python dasturlash</option>
+                    </select>
+                    <button type="submit">Yuborish</button>
+                </form>
+            </div>
+            <div class="hero-img">
+                <img src="/static/img/eee.png" alt="Talaba rasmi"/>
+            </div>
+        </div>
+    </header>
+
+    <section class="courses container">
+        <h2>Kurslar</h2>
+        <div class="course-list">
+            <div class="eng"><img class="imggo" src="/static/img/ChatGPT%20Image%20May%203,%202025,%2008_41_33%20PM.png"
+                                  alt="">Ingliz tili
+            </div>
+            <div class="eng"><img class="imggo" src="/static/img/ChatGPT%20Image%20May%203,%202025,%2009_59_19%20PM.png"
+                                  alt=""> Matematika
+            </div>
+            <div class="eng"><img class="imgggoo"
+                                  src="/static/img/ChatGPT%20Image%20May%203,%202025,%2009_52_16%20PM.png" alt=""> IT
+            </div>
+            <div class="eng"><img class="imgggoo"
+                                  src="/static/img/ChatGPT%20Image%20May%203,%202025,%2010_00_28%20PM.png" alt="">
+                Maktab fanlari
+            </div>
+            <div class="eng"><img class="imgggo"
+                                  src="/static/img/ChatGPT%20Image%20May%203,%202025,%2010_05_15%20PM.png" alt=""> Rus
+                tili
+            </div>
+            <div class="eng"><img class="imgggoo"
+                                  src="/static/img/ChatGPT%20Image%20May%203,%202025,%2010_07_47%20PM.png" alt=""> Arab
+                tili
+            </div>
+        </div>
+    </section>
+    <div class="hog">
+        <section class="number-animation container">
+            <div class="number" id="number"><p>+</p>1</div>
+
+            <div class="button-container">
+                O`qvchilar soni
+            </div>
+        </section>
+        <section class="number-animation container">
+            <div class="numberss" id="number"><p>+</p>1</div>
+
+            <div class="button-container">
+                Bitiruvchilar
+            </div>
+        </section>
+        <section class="number-animation container">
+            <div class="numbersss" id="number"><p>%</p>1</div>
+
+            <div class="button-container">
+                Oqigan va mavnun
+            </div>
+        </section>
+
+    </div>
+
+
+    <section class="about container">
+        <h2>Biz haqimizda</h2>
+        <p>Turon o‘quv markazi sifatli ta'lim, tajribali o‘qituvchilar va zamonaviy yondashuvlarni taqdim etadi.
+            Biz darslarni sifatli va juda zamonaviy tarizda orgatamiz.</p>
+        <p>Bizning lokatsiyamiz:</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1869.502006471161!2d69.948403!3d41.636621!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38af16a418831869%3A0x7cc9a20b5cbc2070!2s16-o&#39;rta%20maktab!5e1!3m2!1sru!2sus!4v1746294406917!5m2!1sru!2sus"
+                width="100%" height="600" style="border:0; margin-top: 20px" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <section class="teachers container">
+        <h2>O‘qituvchilar</h2>
+        <div class="teacher-list">
+            <div class="teacher-card"><img class="ticherone" src="/static/img/teacher3.jpg" alt="">
+                <h3>Aleksey Smirnov</h3>
+                <p><strong>Soha:</strong>
+                    IT</p></div>
+            <div class="teacher-card"><img class="ticherone" src="/static/img/teacher1.jpg" alt="">
+                <h3>Igor Vasilev</h3>
+                <p><strong>Soha:</strong> Savdo va investitsiyalar</p></div>
+            <div class="teacher-card"><img class="ticherone" src="/static/img/teacher.jpg.jpg" alt="">
+                <h3>Dmitriy Orlov</h3>
+                <p><strong>Soha:</strong> Notiqlik</p></div>
+        </div>
+    </section>
+{% endblock %}

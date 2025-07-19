@@ -1,0 +1,38 @@
+{% extends 'Header.html' %}
+{% block links %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/register_login.css">
+    <link rel="stylesheet" href="/static/css/Header.css">
+{% endblock %}
+{% block edus %}
+    <section class="section_bint">
+        <div class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md">
+            <h1 class="text-2xl font-bold text-center mb-6">Hisobni ozgartirish</h1>
+            <form action="{{ url_for('edituserforadmin', id=student.id) }}" class="Post" method="post"
+                  enctype="multipart/form-data">
+                <input class="w-full p-3 mb-3 rounded-lg border" type="text" name="name"
+                       placeholder="{{ student.name }}" required>
+                <input class="w-full p-3 mb-3 rounded-lg border" type="text" name="surname"
+                       placeholder="{{ student.surname }}" required>
+                <input class="w-full p-3 mb-3 rounded-lg border" type="date" name="year"
+                       placeholder="tug`lgan sana" required>
+                <input class="w-full p-3 mb-3 rounded-lg border" type="email" name="email"
+                       placeholder="{{ student.email }}" required>
+                <select class="w-full p-3 mb-3 rounded-lg border" name="kurs_id" id="">
+                    {% for kur in kurs %}
+
+                        <option value="{{ kur.id }}">{{ kur.name }}</option>
+                    {% endfor %}
+
+                </select>
+
+
+                <input class="w-full p-3 mb-3 rounded-lg border" type="file" name="photo" placeholder="Rasm" required>
+                <input class="w-full p-3 mb-3 rounded-lg border" type="password" name="password" placeholder="Parol"
+                       required>
+                <button class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">O`zgartirish</button>
+            </form>
+
+        </div>
+    </section>
+{% endblock %}

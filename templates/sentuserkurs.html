@@ -1,0 +1,147 @@
+{% extends "Header.html" %}
+{% block links %}
+    <title>Foydalanuvchilar va Kurslar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+{% block container %}
+    <body class="bg-gray-100 p-6">
+
+    <div style="width: 1900px" class="max-w-7xl mx-auto bg-white p-6 rounded-2xl shadow-md">
+        <h1 class="text-2xl font-bold mb-6">Foydalanuvchilar va Kurslar</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Kurs select qismi -->
+            <div class="bg-gray-50 p-4 rounded-xl shadow">
+                <h2 class="text-xl font-semibold mb-4">Kurs tanlang</h2>
+                <select id="kursSelect" class="w-full p-2 border rounded-lg bg-white" onchange="getData()">
+                    {% for kur in kurses %}
+                        <option value="{{ kur.id }}">{{ kur.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Foydalanuvchilar jadvali -->
+            <div style="width: 600px" class="bg-gray-50 p-4 rounded-xl shadow overflow-x-auto">
+                <h2 class="text-xl font-semibold mb-4">Foydalanuvchilar ro'yxati</h2>
+                <table class="min-w-full table-auto border">
+                    <thead class="bg-gray-200 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left">#</th>
+                        <th class="px-4 py-2 text-left">Ism</th>
+                        <th class="px-4 py-2 text-left">Familiya</th>
+                        <th class="px-4 py-2 text-left">Email</th>
+                        <th class="px-4 py-2 text-left">Tanlash</th>
+                    </tr>
+                    </thead>
+                    <tbody id="output" class="bg-white">
+
+                    </tbody>
+                    {#            jsondaan kelaadigan malumot#}
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Button -->
+        <div class="mt-6 text-center">
+            <button
+                    onclick="submitSelected()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl transition">
+                Saqlash
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedStudentIds = [];
+
+        function getData() {
+            selectedStudentIds = [];
+            const kursSelect = document.getElementById("kursSelect");
+            const kursId = kursSelect.value;
+
+            if (!kursId) {
+                document.getElementById("output").innerHTML = `<tr><td colspan="5" class="text-center p-4">Iltimos, kursni tanlang.</td></tr>`;
+                return;
+            }
+
+            fetch(`/api/date_of_student/${kursId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Tarmoq javobi xato: " + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    const output = document.getElementById("output");
+                    output.innerHTML = '';
+                    data.forEach(user => {
+                        const row = `
+                    <tr class="border-b" data-id='${user.id}'>
+                        <td class="p-2">${user.id}</td>
+                        <td class="p-2">${user.name}</td>
+                        <td class="p-2">${user.surname}</td>
+                        <td class="p-2">${user.email}</td>
+                        <td class="p-2 text-center">
+                            <input data-id="${user.id}" type="checkbox" class="check w-5 h-5 text-blue-600">
+                        </td>
+                    </tr>`;
+                        output.innerHTML += row;
+                    });
+                    {#htmlda bekenntgaa kelgn maalumotni qoshadi#}
+
+                    document.querySelectorAll('.check').forEach(cb => {
+                        cb.addEventListener('input', function () {
+                            const id = cb.dataset.id;
+                            if (cb.checked) {
+                                if (!selectedStudentIds.includes(id)) selectedStudentIds.push(id);
+                            } else {
+                                selectedStudentIds = selectedStudentIds.filter(i => i !== id);
+                            }
+                        });
+                        {#user cheked (chekbox) qilinganda id sini olib massive ga push(qoshish) qiladi #}
+                    });
+                })
+                .catch(error => {
+                    console.error("Xatolik:", error);
+                    document.getElementById("output").innerHTML =
+                        `<tr><td colspan="5" class="text-red-600 text-center p-4">Xatolik: ${error.message}</td></tr>`;
+                });
+        }
+
+        function submitSelected() {
+            const kursSelect = document.getElementById("kursSelect");
+            const kursId = kursSelect.value;
+
+            if (!kursId) {
+                alert("Iltimos, kursni tanlang.");
+                return;
+            }
+
+            if (selectedStudentIds.length === 0) {
+                alert("Iltimos, studentlarni belgilang.");
+                return;
+            }
+
+            fetch(`/add_students_json/${kursId}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({student_ids: selectedStudentIds}),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(`${data.message} Qo‘shildi: ${data.added}`);
+                    selectedStudentIds = [];
+                    getData();
+                })
+                .catch(err => {
+                    alert('Xatolik yuz berdi');
+                    console.error(err);
+                });
+        }
+
+        {#buttonSet bosilgandaa massivdagi malumotnni bekentga yuboradi#}
+        // Sahifa yuklanganda dastlabki kurs bo‘yicha ma'lumotlarni yuklash
+        window.onload = getData;
+    </script>
+
+{% endblock %}

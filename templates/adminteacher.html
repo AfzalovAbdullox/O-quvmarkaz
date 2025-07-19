@@ -1,0 +1,80 @@
+{% extends "Header.html" %}
+{% block liad %}
+    <link rel="stylesheet" href="/static/css/Header.css">
+    <link rel="stylesheet" href="/static/css/admincss.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+{% block adminpage %}
+    <button style="margin-top: 72px" onclick="toggleFilter()" class="bg-green-600 text-white p-2 rounded">Filter
+    </button>
+    <section style="width: auto;height: auto;display: flex;align-items: center;justify-content: space-around">
+
+
+        <div id="filter-box" class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md"
+             style="display: none;">
+            <form class="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md" method="post"
+                  action="{{ url_for('adminteacher') }}">
+                <input class="w-full p-3 mb-3 rounded-lg border" type="text" name="name" placeholder="ism">
+                <input class="w-full p-3 mb-3 rounded-lg border" type="text" name="surname" placeholder="familiya">
+                <input class="w-full p-3 mb-3 rounded-lg border" type="date" name="year" placeholder="Tug`ilgan sana">
+
+                <div class="box">
+                    <button class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700" type="submit">Поиск
+                    </button>
+                    <button class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700" name="reset"
+                            type="submit">Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ism</th>
+                <th>Email</th>
+                <th>Sana</th>
+                <th>Parol</th>
+                <th>O`quvchilar</th>
+                <th>Amallar</th>
+            </tr>
+            </thead>
+            {% for teacher in teachers %}
+                <tbody>
+                <tr>
+                    <td>{{ teacher.id }}</td>
+                    <td>{{ teacher.name }} {{ teacher.surname }}</td>
+                    <td>{{ teacher.email }}</td>
+                    <td>{{ teacher.year }}</td>
+                    <td>........</td>
+
+
+                    {% if teacher_stats[teacher.id] == 0 %}
+                        <td>O`quvchilar yoq</td>
+                    {% else %}
+                        <td>{{ teacher_stats[teacher.id] }}</td>
+                    {% endif %}
+
+
+                    <td style="width: 250px; height: 74px;display: flex;align-items: center;justify-content: space-around">
+                        <a style="text-decoration: none;color: white"
+                           href="{{ url_for('hisob', role='teacher', user_id=teacher.id) }}">
+                            <button class="edit">Tahrirlash</button>
+                        </a>
+                        <form action="{{ url_for("delete_from_teacher", teacher_id=teacher.id) }}" method="POST">
+
+                            <button class="delete">O‘chirish</button>
+                        </form>
+
+                    </td>
+                </tr>
+                </tbody>
+            {% endfor %}
+
+
+        </table>
+    </section>
+    <script src="/static/js/animation.js">
+
+    </script>
+{% endblock %}
